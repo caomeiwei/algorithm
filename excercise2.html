@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>最优路径</title>
+    <script src="./excercise2.js"></script>
+    <script>
+
+        search();
+
+        var m_str =  '<pre>'+ matrix.show() + '</pre>';
+
+
+    </script>
+</head>
+<body style="text-align: center;">
+
+    <h2 >最优路径:深度优先遍历  + 记忆化搜索</h2>
+
+    矩阵： <script> document.write(  m_str  )</script>
+
+    <br>
+    最佳路径: <script> document.write( bestPath() )</script>
+    <br>
+    最大值: <script> document.write( maxvalue )</script>
+
+    <br>
+    到达终点次数： <script> document.write( count )</script>
+
+
+
+</body>
+</html>
