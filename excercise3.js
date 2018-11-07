@@ -60,14 +60,74 @@ const matrix = (_matrix=>{
 
 const RIGHT = 0 ,DOWN =1;
 
-/*
-*先试试深度优先搜
-*/
+
+/**
+ * 节点搜索项
+ */
+class SearchItem{
+
+    /**
+     * @param  {RIGHT|DOWN} direct 来此节点的方向 若是第一个节点则为null
+     * @param  {Array} point  此点的坐标 如 [1,2]
+     * @param  {numbe} sum    走到此点的累计数
+     * @param  {SearchItem} pre    前一个节点
+     */
+    constructor(direct,point,sum,pre=null){
+
+        this.direct= direct;
+        this.point= point;
+        this.sum = sum;
+        this.pre = pre
+    }
+
+    equal(searchitem){ //两个搜索点是否在同一位置
+
+        return this.point.join()==searchitem.point.join()
+    }
+
+    isRowEnd(){ //是否在矩阵的行边界
+
+        return this.point[0] == matrix.row_end
+    }
+
+    isColEnd(){  //是否在矩阵的列边界
+
+        return this.point[1] == matrix.col_end
+    }
+
+    isEndPoint(){  //是否是矩阵的终点
+
+        return this.isRowEnd()&&this.isColEnd()
+
+    }
+
+    getPath(){
+
+        let path = [] , curr = this;
+
+
+        path.push(curr)
+
+        while(curr.pre&&curr.pre.direct!==null){
+
+            curr =  curr.pre ;
+
+            path.push(curr) ;
+
+        }
+
+        return path.reverse().map(v=>v.direct===DOWN?'下':'右')
+
+    }
+}
 
 
 
 
 
+/**
+ * 存储搜索路径的
+ */
 class SearchList extends Array{
 
     constructor(n=0){
@@ -77,7 +137,7 @@ class SearchList extends Array{
 
     add(item){
 
-        for(let i=0;i<this.length;i++){
+        for(let i=0;i<this.length;i++){  //看看有没有坐标相同的点，有则比较累计值大小，再决定替不替换
 
             if( item.equal(this[i]) ){
 
@@ -99,53 +159,52 @@ let count = 0;
 let cur_col=0,cur_row=0;
 
 
-let bestPoint = null;
+const bestPath = new SearchList();
 
-class SearchItem{
-
-    constructor(direct,point,sum,pre=null){
-
-        this.direct= direct;
-        this.point= point;
-        this.sum = sum;
-        this.pre = pre
-    },
-
-    equal(searchitem){ //两个搜索点是否在同一位置
-
-        return this.point.join()==searchitem.point.join()
-    },
-
-    isRowEnd(){ //是否在矩阵的行边界
-
-        return this.point[0] == matrix.row_end
-    },
-
-    isColEnd(){  //是否在矩阵的列边界
-
-        return this.point[1] == matrix.col_end
-    }
-
-    isEndPoint(){  //是否是矩阵的终点
-
-        return this.isRowEnd()&&this.isColEnd()
-
-    }
-}
 
 function search(){
+
+    const searchlist = new SearchList();
 
     searchlist.push( new SearchItem(null,[0 ,0],matrix(0 ,0) ) )
 
 
     while(searchlist.length){
 
-        let  preitem = searchlist.shift();
+        let  item = searchlist.shift();
 
 
-        if(preitem.isEndPoint() ){
+        if(item.isEndPoint()){
 
 
+            bestPath.add(item);
+
+            continue;
+        }
+
+
+        if( !item.isRowEnd() ){ //不是最后一行 ,就把下一行的点加进搜索路径数组
+
+            let [row,col] = item.point ;
+
+            row++;
+
+            let sum = item.sum + matrix(row,col);
+
+            searchlist.add( new SearchItem(DOWN,[row,col],sum,item)  );
+
+        }
+
+
+        if( !item.isColEnd()  ){  //不是最后一列，就把下一列的一个点加进搜索数组
+
+            let [row,col] = item.point ;
+
+            col++;
+
+            let sum = item.sum + matrix(row,col);
+
+            searchlist.add( new SearchItem(RIGHT,[row,col],sum,item)  );
 
         }
 

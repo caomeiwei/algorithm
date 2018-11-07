@@ -5,7 +5,9 @@
     <script src="./excercise1.js"></script>
     <script>
 
+        console.time('searchtime');
         search();
+        console.timeEnd('searchtime');
 
         var m_str =  '<pre>'+ matrix.show() + '</pre>';
 
