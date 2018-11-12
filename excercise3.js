@@ -135,7 +135,7 @@ class SearchList extends Array{
         super(n);
     }
 
-    add(item){
+    add(item){ //用更好的替换不好的，不是更好，就不替换
 
         for(let i=0;i<this.length;i++){  //看看有没有坐标相同的点，有则比较累计值大小，再决定替不替换
 

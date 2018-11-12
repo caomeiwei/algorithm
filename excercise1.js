@@ -131,7 +131,7 @@ function search(){
 
             maxvalue=currvalue;
 
-            path= currpath.concat([]) ;
+            path= currpath.concat([]) ; //相当于复制数组
         }
 
     }
